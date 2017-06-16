@@ -1,0 +1,105 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: MyPassword
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /api/v1
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+paths:
+  /:
+    get:
+      description: "this path return all the passwords in the database"
+      operationId: "GetAllPasswords"
+      parameters: []
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/PasswordWithId"
+      x-swagger-router-controller: "GetAllPasswords"
+    post:
+      description: create a new password
+      operationId: "CreatePassword"
+      produces:
+      - application/json
+      parameters: 
+      - name: "password"
+        in: "body"
+        description: "the password to be added"
+        required: true
+        schema: 
+          $ref: "#/definitions/Password"
+      responses:
+        "201":
+          description: "Successfully add password"
+          schema:
+            $ref: "#/definitions/PasswordWithId"
+      x-swagger-router-controller: "CreatePassword"
+  /password/{id}:
+    get:
+      description: "get specific password according to Id"
+      operationId: "GetPasswordById"
+      produces:
+      - application/json
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "the id of the password to get"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "get password response"
+          schema:
+            $ref: "#/definitions/Password"
+      x-swagger-router-controller: "GetPasswordById"
+    delete:
+      description: "delete the specific password accroding to Id"
+      operationId: "DeletePasswordById"
+      produces:
+      - application/json
+      parameters:
+      - name: "id"
+        in: "path" 
+        description: "the id of the password to delete"
+        required: true
+        type: "string"
+      responses:
+        "204":
+          description: "delete successfully"
+      x-swagger-router-controller: "DeletePasswordById"
+definitions:
+  Password:
+    type: "object"
+    properties:
+      name:
+        type: string
+      password: 
+        type: string 
+      url:
+        type: string
+      tag:
+        type: string
+  PasswordWithId:
+    type: "object"
+    properties:
+      id: 
+        type: string
+      name:
+        type: string
+      password: 
+        type: string 
+      url:
+        type: string  
+      tag:
+        type: string

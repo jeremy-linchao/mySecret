@@ -1,0 +1,36 @@
+.app {
+  background-color: yellow;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  flex: 1;
+}
+
+.header {
+  background-color: black;
+  height: 3.5em;
+}
+
+.content-wapper {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+.nav {
+  background-color:#212121;
+  max-width: 11em;
+  flex: 0 0 11em;
+  order: -1;
+}
+
+.content {
+  background-color: white;
+  flex: 1
+}
+
+.footer {
+  background-color: black;
+  height: 4em;
+}
+
