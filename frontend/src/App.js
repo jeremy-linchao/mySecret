@@ -7,6 +7,7 @@ class App extends Component {
     return (
       <div className="app">
         <div className="header">
+          <h2>mySercet</h2>
         </div>
         <div className="content-wapper">
           <div className="nav">
