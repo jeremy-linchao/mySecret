@@ -4,7 +4,8 @@ import {
   DetailsListLayoutMode,
   Selection,
   DetailsRow,
-  CheckboxVisibility
+  CheckboxVisibility,
+  ColumnActionsMode
 } from 'office-ui-fabric-react/lib/DetailsList';
 import {
   Spinner,
@@ -16,6 +17,8 @@ import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { CommandButton, PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import copy from 'copy-to-clipboard';
 
 let _columns = [
   {
@@ -116,13 +119,67 @@ class Password extends React.Component {
     }
   }
 
+  renderName(name) {
+    return (
+      <div className="oneline">
+        <Label className="nameLabel">{name}</Label>
+        <IconButton
+          iconProps={{ iconName: 'Copy', style: { fontSize: '16px' } }}
+          onClick={() => copy(name)}
+          className="copyButton"
+        />
+      </div>
+    )
+  }
+
+  renderUrl(url) {
+    return (
+      <div className="oneline">
+        <Label>{url}</Label>
+        <IconButton
+          iconProps={{ iconName: 'Copy', style: { fontSize: '16px' } }}
+          onClick={() => copy(url)}
+          className="copyButton"
+        />
+      </div>
+    )
+  }
+
+  renderPassword(isHidden, password) {
+    if (isHidden) {
+      return (
+        <div className="oneline">
+          <Label>******</Label>
+          <IconButton
+            iconProps={{ iconName: 'Copy', style: { fontSize: '16px' } }}
+            onClick={() => copy(password)}
+            className="copyButton"
+          />
+        </div>
+      )
+    } else {
+      return (
+        <div className="oneline">
+          <Label>{password}</Label>
+          <IconButton
+            iconProps={{ iconName: 'Copy', style: { fontSize: '16px' } }}
+            onClick={() => copy(password)}
+            className="copyButton"
+          />
+        </div>
+      )
+    }
+  }
+
+
+
   computeDataSet(dataSet, makePasswordVisible, makePasswordHidden, deletePassword) {
     return dataSet.map(ele => {
       return {
         tag: <Label>{ele.tag}</Label>,
-        name: <Label>{ele.name}</Label>,
-        url: <Label>{ele.url}</Label>,
-        password: ele.isHidden ? <Label>******</Label> : <Label>{ele.password}</Label>,
+        name: this.renderName(ele.name),
+        url: this.renderUrl(ele.url),
+        password: this.renderPassword(ele.isHidden, ele.password),
         operation: this.renderOperation(ele.id, ele.isHidden, makePasswordVisible, makePasswordHidden, deletePassword)
       }
     })
@@ -161,8 +218,9 @@ class Password extends React.Component {
           <DetailsList
             items={computedDataSet}
             columns={_columns}
-            layoutMode={DetailsListLayoutMode.fixedColumns}
+            layoutMode={DetailsListLayoutMode.justified}
             checkboxVisibility={CheckboxVisibility.hidden}
+            columnActionsMode={ColumnActionsMode.clickable}
           />
           {loading && <Spinner size={SpinnerSize.large} label='正在加载中...' />}
         </div>
